@@ -6,7 +6,7 @@
 /*   By: whan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 14:26:17 by whan              #+#    #+#             */
-/*   Updated: 2020/11/22 21:21:33 by whan             ###   ########.fr       */
+/*   Updated: 2020/12/08 23:06:03 by whan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ int		check_newline(char **draw, char **line)
 	return (0);
 }
 
-int	finish(char **line)
+int		finish(char **line)
 {
 	*line = (char *)malloc(sizeof(char) * 1);
 	(*line)[0] = 0;
-	return (0);
+	return(0);
 }
 
 int		all_read (draw, line)
@@ -93,8 +93,10 @@ int		strnl(char *line)
 
 	i = 0;
 	while (line[i])
+	{
 		if (line[i++] == 10)
-			return (1);
+			return(1);
+	}
 	return (0);
 }
 
@@ -120,7 +122,22 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		buf[res] = 0;
 		if (res == 0)
+<<<<<<< HEAD
 			return (all_read(draw, line);
+=======
+		{
+			if (!strnl(draw))
+			{
+				*line = strjoin(*line, draw);
+				*draw = 0;
+				return (0);
+			}
+			else if(*draw == 0)
+				return (finish(line));
+			*line = strjoin(*line, draw);
+			return (1);
+		}
+>>>>>>> ff0af148d9de8467cb971ea21edea57ecb40e0f3
 		draw = strjoin(draw, buf);
 	}
 }
