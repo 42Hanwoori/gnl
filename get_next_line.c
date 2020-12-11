@@ -77,6 +77,16 @@ int	finish(char **line)
 	return (0);
 }
 
+int		all_read (draw, line)
+{
+	if (draw == 0 || *draw == 0)
+		return (finish(line));
+	*line = strjoin(*line, draw);
+	free(draw);
+	draw = 0;
+	return (0);
+}
+
 int		strnl(char *line)
 {
 	int i;
@@ -106,18 +116,11 @@ int		get_next_line(int fd, char **line)
 		while (buf[++i])
 			buf[i] = 0;
 		res = read(fd, buf, BUFFER_SIZE);
-		if(res<0)
+		if (res < 0)
 			return (-1);
 		buf[res] = 0;
 		if (res == 0)
-		{
-			// if (*draw == 0)
-			// 	return (finish(line));
-			*line = strjoin(*line, draw);
-			free(draw);
-			draw = 0;
-			return (0);
-		}
+			return (all_read(draw, line);
 		draw = strjoin(draw, buf);
 	}
 }
