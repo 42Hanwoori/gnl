@@ -37,34 +37,37 @@ char	*strjoin(char *dst, char *src)
 	return dst;
 }
 
-int		check_newline(char **draw, char **line)
+int		submit_and_trim(int i, int j, char **draw, char **line)
 {
+	char	*tmp;
 
+	tmp = (char *)malloc(sizeof(char) * (i + 1));
+	while (i > ++j)
+		tmp[j] = (*draw)[j];
+	tmp[i] = 0;
+	*line = tmp;
+	j = ft_strlen(*draw) - i;
+	tmp = (char *)malloc(sizeof(char) * j);
+	j = 0;
+	while ((*draw)[++i])
+		tmp[j++] = (*draw)[i];
+	tmp[j] = 0;
+	free(*draw);
+	*draw = tmp;
+	return (1);
+}
+
+int		check_nl_and_exe(char **draw, char **line)
+{
 	int		i;
 	int		j;
-	char	*tmp;
 
 	i = 0;
 	j = -1;
 	while (*draw != 0 && (*draw)[i])
 	{
 		if ((*draw)[i] == 10)
-		{
-			tmp = (char *)malloc(sizeof(char) * (i + 1));
-			while (i > ++j)
-				tmp[j] = (*draw)[j];
-			tmp[i] = 0;
-			*line = tmp;
-			j = ft_strlen(*draw) - i;
-			tmp = (char *)malloc(sizeof(char) * j);
-			j = 0;
-			while ((*draw)[++i])
-				tmp[j++] = (*draw)[i];
-			tmp[j] = 0;
-			free(*draw);
-			*draw = tmp;
-			return (1);
-		}
+			return (submit_and_trim(i, j, draw, line));
 		i++;
 	}
 	return (0);
@@ -74,29 +77,16 @@ int		finish(char **line)
 {
 	*line = (char *)malloc(sizeof(char) * 1);
 	(*line)[0] = 0;
-	return(0);
-}
-
-int		all_read (draw, line)
-{
-	if (draw == 0 || *draw == 0)
-		return (finish(line));
-	*line = strjoin(*line, draw);
-	free(draw);
-	draw = 0;
 	return (0);
 }
 
-int		strnl(char *line)
+int		all_read(char **draw, char **line)
 {
-	int i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i++] == 10)
-			return(1);
-	}
+	if (*draw == 0 || **draw == 0)
+		return (finish(line));
+	*line = strjoin(*line, *draw);
+	free(*draw);
+	*draw = 0;
 	return (0);
 }
 
@@ -112,7 +102,7 @@ int		get_next_line(int fd, char **line)
 	*line = 0;
 	while(1)
 	{
-		if (draw != 0 && check_newline(&draw, line))
+		if (draw != 0 && check_nl_and_exe(&draw, line))
 			return (1);
 		i = -1;
 		while (buf[++i])
@@ -122,22 +112,7 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		buf[res] = 0;
 		if (res == 0)
-<<<<<<< HEAD
-			return (all_read(draw, line);
-=======
-		{
-			if (!strnl(draw))
-			{
-				*line = strjoin(*line, draw);
-				*draw = 0;
-				return (0);
-			}
-			else if(*draw == 0)
-				return (finish(line));
-			*line = strjoin(*line, draw);
-			return (1);
-		}
->>>>>>> ff0af148d9de8467cb971ea21edea57ecb40e0f3
+			return (all_read(&draw, line));
 		draw = strjoin(draw, buf);
 	}
 }

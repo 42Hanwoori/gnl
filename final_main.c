@@ -131,7 +131,7 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		buf[res] = 0;
 		if (res == 0)
-			return(all_read(draw, line));
+			return (all_read(draw, line));
 		draw = strjoin(draw, buf);
 	}
 }
