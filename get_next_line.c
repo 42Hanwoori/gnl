@@ -12,31 +12,6 @@
 
 #include "get_next_line.h"
 
-char	*strjoin(char *dst, char *src)
-{
-	char	*tmp;
-	int		len;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	len = ft_strlen(dst) + ft_strlen(src);
-	tmp = (char *)malloc(sizeof(char) * (len + 1));
-	while (dst && dst[i])
-	{
-		tmp[i] = dst[i];
-		i++;
-	}
-	while (src[j])
-		tmp[i++] = src[j++];
-	tmp[i] = 0;
-	if (dst)
-		free(dst);
-	dst = tmp;
-	return dst;
-}
-
 int		submit_and_trim(int i, int j, char **draw, char **line)
 {
 	char	*tmp;
@@ -92,7 +67,7 @@ int		all_read(char **draw, char **line)
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*draw;
+	static char	*draw[OPEN_SIZE];
 	char		buf[BUFFER_SIZE + 1];
 	int			res;
 	int			i;
@@ -102,7 +77,7 @@ int		get_next_line(int fd, char **line)
 	*line = 0;
 	while(1)
 	{
-		if (draw != 0 && check_nl_and_exe(&draw, line))
+		if (draw[fd] != 0 && check_nl_and_exe(&draw[fd], line))
 			return (1);
 		i = -1;
 		while (buf[++i])
@@ -112,7 +87,7 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		buf[res] = 0;
 		if (res == 0)
-			return (all_read(&draw, line));
-		draw = strjoin(draw, buf);
+			return (all_read(&draw[fd], line));
+		draw[fd] = strjoin(draw[fd], buf);
 	}
 }

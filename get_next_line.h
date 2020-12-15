@@ -16,9 +16,18 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 256
+#endif
+
+#ifndef OPEN_SIZE
+#define OPEN_SIZE 256
+#endif
+
+int		submit_and_trim(int i, int j, char **draw, char **line)
+int		check_nl_and_exe(char **draw, char **line)
+int		finish(char **line);
+int		all_read(char **draw, char **line)
 size_t	ft_strlen(const char *s);
 char	*strjoin(char *dst, char *src);
-int		check_newline(char **draw, char **line);
-int		strnl(char *line);
-int		finish(char **line);
 int		get_next_line(int fd, char **line);
